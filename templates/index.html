@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Schedule</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<script>
+    function displayDate() {
+        var today = new Date();
+        var date = " "+today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        document.getElementById('currentDate').innerText += date;
+    }
+</script>
+<body class="d-flex flex-column align-items-center text-center" onload="displayDate()">
+    <div class="container">
+        {% if data['metadata']['postrequest'] %}
+            <p class="text-warning">Looking at previous exercise record.</p>
+        {% endif %}
+        <h1 class="my-4">Today's Workout</h1>
+        <h2 class="mb-4">Muscle Group: 
+            {% if data['exercises'] %}
+                {{data['exercises'][0]['muscle_group']}}
+            {% else %}
+                <strong>REST DAY</strong>
+            {% endif %}
+        </h2>
+        {% if data['exercises'] %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for exercise in data['exercises'] %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ exercise['name'] }}</h5>
+                                <p class="card-text">
+                                    <strong>Muscle Worked:</strong> {{ exercise['muscle'] }}<br>
+                                    <strong>Sets:</strong> {{ exercise['sets'] }}<br>
+                                    <strong>Reps per Set:</strong> {{ exercise['reps'] }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+        </div>
+        <a href="{{ url_for('home') }}" class="btn btn-primary mt-4">Refresh Selection.</a>
+        {% else %}
+        <p>💪😴 Time to rest and recover! 🛌🛌</p>
+        {% endif %}
+        {% if data['metadata']['postrequest'] %}
+            <p class="text-warning">Data for the date:<br>{{data['metadata']['date']}}</p>
+            <p class="text-warning">{{data['metadata']['day']}}</p>
+        {% endif %}
+        <form action="{{ url_for('home') }}" method="post">
+            <div class="col">
+                <div class="card h-100 w-70">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Select Previous Day's Workout</h5>
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="inputGroupSelect01" id="currentDate">Days Back from today:</label>
+                            <select class="form-select" id="inputGroupSelect01" name="days">
+                                <option selected>Choose...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                            </select>
+                            <span><input type="submit" value="submit" class="btn btn btn-primary"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>    
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</body>
+</html>
