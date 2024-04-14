@@ -60,6 +60,15 @@ def home():
     }
     if request.method == 'POST':
         print('Post request made.')
+        try:
+            int(request.form['days'])
+        except ValueError as e:
+            print("Improper POST request: ValueError FLAGGED "+str(e))
+            return render_template('index.html',data=data)
+        except Exception as e2:
+            print("Improper POST request: Unclassified error FLAGGED "+str(e2))
+            return render_template('index.html',data=data)
+        
         data['metadata']['postrequest']=True
         data['exercises'] =today(int(request.form['days']))
         date = datetime.now() - timedelta(int(request.form['days']))
