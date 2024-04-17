@@ -29,10 +29,9 @@ document.querySelector('form').addEventListener('submit', function(event) {
 */
 
 document.querySelector('form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the form from submitting
-
     var select = document.getElementById('inputGroupSelect01');
     if (select.value === 'None') {
+        event.preventDefault(); // Prevent the form from submitting
         var toastEl = document.getElementById('liveToast');
         var toast = new bootstrap.Toast(toastEl);
         // Show the toast
